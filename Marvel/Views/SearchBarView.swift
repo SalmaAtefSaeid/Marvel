@@ -8,49 +8,75 @@
 import SwiftUI
 
 struct SearchBarView: View {
-    
     @Binding var searchText: String
     @ObservedObject var viewModel: MarvelCharactersListViewModel
     @Binding var showCancelButton: Bool
     
     var body: some View {
         HStack {
-            if showCancelButton  {
-                TextField("search", text: $searchText, onEditingChanged: { isEditing in
-                    viewModel.searchForCharacters(searchQuery: searchText)
-                }, onCommit: {
-                    viewModel.searchForCharacters(searchQuery: searchText)
-                }).foregroundColor(.primary)
+            if showCancelButton {
+                TextField(
+                    "Search",
+                    text: $searchText,
+                    onEditingChanged: { _ in
+                        viewModel.searchForCharacters(searchQuery: searchText)
+                    },
+                    onCommit: {
+                        viewModel.searchForCharacters(searchQuery: searchText)
+                    }
+                )
+                .foregroundColor(.primary)
+                
+                if !searchText.isEmpty {
+                    Button(action: {
+                        clearSearch()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.red)
+                    }
+                }
+                
+                Button("Cancel") {
+                    cancelSearch()
+                }
+                .foregroundColor(.red)
+            } else {
+                Spacer()
+                Image("Marvel_Logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 40)
+                    .clipped()
+                    .transition(.opacity)
+                    .padding(.leading, 30)
+                
+                Spacer()
                 
                 Button(action: {
-                    self.searchText = ""
-                    viewModel.loadMoreCharactersIfNeeded(currentCharacter: nil)
+                    showCancelButton.toggle()
                 }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .opacity(searchText == "" ? 0 : 1)
-                        .foregroundColor(.red)
-                }
-                Button("Cancel") {
-                    UIApplication.shared.endEditing(true)
-                    self.searchText = ""
-                    viewModel.loadMoreCharactersIfNeeded(currentCharacter: nil)
-                    self.showCancelButton = false
-                }
-                .foregroundColor(Color(.red))
-            } else {
-                HStack {
-                    Spacer()
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.red)
                 }
-                .onTapGesture {
-                    showCancelButton.toggle()
-                }
-                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                .frame(width: 30)
             }
-            
-            
         }
-        .padding(.horizontal)
-        .navigationBarHidden(showCancelButton)}
+    }
+    
+    private func clearSearch() {
+        searchText = ""
+        viewModel.loadMoreCharactersIfNeeded(currentCharacter: nil)
+    }
+    
+    private func cancelSearch() {
+        UIApplication.shared.endEditing(true)
+        searchText = ""
+        viewModel.loadMoreCharactersIfNeeded(currentCharacter: nil)
+        showCancelButton = false
+    }
+}
+
+
+#Preview {
+    SearchBarView(searchText: .constant(""), viewModel: MarvelCharactersListViewModel(), showCancelButton: .constant(false))
 }

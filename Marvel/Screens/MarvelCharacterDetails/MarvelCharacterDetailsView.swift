@@ -50,8 +50,14 @@ struct MarvelCharacterDetailsView: View {
                     
                 }
             }
+            .fullScreenCover(isPresented: $showPopUpImageView) {
+                if let selectedImages = selectedImages, let selectedName = selectedName {
+                    PopUpImagesListView(images: selectedImages, name: selectedName, showPopUpView: $showPopUpImageView)
+                }
+            }
             .ignoresSafeArea(edges: .top)
             .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
             .alert(isPresented: $viewModel.showError, content: {
                 Alert(title: Text(""), message: Text(viewModel.errorMessage), dismissButton: .destructive(Text("OK")))
             })
@@ -64,12 +70,6 @@ struct MarvelCharacterDetailsView: View {
                             .opacity(showPopUpImageView ? 0 : 0.8)
                     }
                 }
-            }
-            .opacity(showPopUpImageView ? 0 : 0.8)
-            .disabled(showPopUpImageView)
-            
-            if let selectedImages = selectedImages, let selectedName = selectedName, showPopUpImageView {
-                PopUpImagesListView(images: selectedImages, name: selectedName, showPopUpView: $showPopUpImageView)
             }
         }
     }

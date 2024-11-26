@@ -15,23 +15,33 @@ struct ImagesListScrollView: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                ForEach(images) { image in
-                    VStack {
+            HStack(spacing: 0) {
+                ForEach(Array(images.enumerated()), id: \.offset) { index, image in
+                    VStack(alignment: .center, spacing: 0) {
                         WebImage(url: URL(string: image.fullURL))
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.7)
                             .clipped()
+                            .padding(.bottom)
+                        
                         Text(name)
                             .font(.caption)
-                            .lineLimit(2) // Adjust for long text with ellipsis
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.top, 5)
+                            .padding(.bottom)
+                            .lineLimit(3)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: UIScreen.main.bounds.width * 0.8)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.white)
+                        
+                        Text("\(index+1) / \(images.count)")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                            .opacity(0.5)
                     }
+                    .frame(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.9)
                 }
             }
         }
-        .frame(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.8)
     }
 }

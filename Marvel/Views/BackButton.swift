@@ -12,6 +12,7 @@ struct BackButton: View {
         HStack {
             Image(systemName: "chevron.left")
                 .foregroundColor(Color(.label))
+                .font(.title3)
         }
     }
 }

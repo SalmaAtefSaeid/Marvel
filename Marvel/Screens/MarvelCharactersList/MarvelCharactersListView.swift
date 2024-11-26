@@ -16,7 +16,7 @@ struct MarvelCharactersListView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                if viewModel.isLoading {
+                if viewModel.isLoading && viewModel.characters.isEmpty {
                     LoadingView()
                 } else if viewModel.characters.isEmpty {
                     NoCharactersView()
@@ -28,10 +28,12 @@ struct MarvelCharactersListView: View {
                                     viewModel.loadMoreCharactersIfNeeded(currentCharacter: character)
                                 }
                         }
+                        .listRowInsets(EdgeInsets())
                     }
                     .listStyle(.plain)
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: MarvelCharacter.self) { character in
                 MarvelCharacterDetailsView(viewModel: MarvelCharacterDetailsViewModel(character: character))
             }
@@ -39,23 +41,9 @@ struct MarvelCharactersListView: View {
                 Alert(title: Text(""), message: Text(viewModel.errorMessage), dismissButton: .destructive(Text("OK")))
             })
             .toolbar {
-                ToolbarItem(placement: .principal, content: {
-                    ZStack {
-                        if startSearching == false {
-                            Image("Marvel_Logo")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 60, height: 40, alignment: .center)
-                                .clipped()
-                        }
-                        
-                        HStack {
-                            if viewModel.isLoading == false {
-                                SearchBarView(searchText: $searchText, viewModel: viewModel, showCancelButton: $startSearching)
-                            }
-                        }
-                    }
-                })
+                ToolbarItem(placement: .principal) {
+                    SearchBarView(searchText: $searchText, viewModel: viewModel, showCancelButton: $startSearching)
+                }
             }
         }
     }

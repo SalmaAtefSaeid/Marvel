@@ -15,24 +15,27 @@ struct PopUpImagesListView: View {
     @Binding var showPopUpView: Bool
     
     var body: some View {
-        ZStack {
-            VStack {
+        ZStack(alignment: .topTrailing) {
+            Color.black
+                .opacity(0.8)
+            
+            VStack(alignment: .trailing) {
                 Spacer()
-                ImagesListScrollView(images: images, name: name)
-                Spacer()
-            }
-        }
-        .edgesIgnoringSafeArea(.all)
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
                     showPopUpView = false
                 }) {
                     ExitButton()
+                        .padding(.top, 20)
+                        .padding(.trailing, 20)
                 }
+                ImagesListScrollView(images: images, name: name)
+                Spacer()
             }
+            .edgesIgnoringSafeArea(.all)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
+        .edgesIgnoringSafeArea(.all)
+        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
     }
 }
 
