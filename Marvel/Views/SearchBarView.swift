@@ -61,6 +61,7 @@ struct SearchBarView: View {
                 .frame(width: 30)
             }
         }
+        .frame(width: UIScreen.main.bounds.width*0.9)
     }
     
     private func clearSearch() {

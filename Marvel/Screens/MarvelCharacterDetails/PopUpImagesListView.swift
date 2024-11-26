@@ -25,9 +25,11 @@ struct PopUpImagesListView: View {
                     showPopUpView = false
                 }) {
                     ExitButton()
-                        .padding(.top, 20)
-                        .padding(.trailing, 20)
+                        .frame(width: 30, height: 30)
                 }
+                .padding(.top, 20)
+                .padding(.trailing, 20)
+                
                 ImagesListScrollView(images: images, name: name)
                 Spacer()
             }
