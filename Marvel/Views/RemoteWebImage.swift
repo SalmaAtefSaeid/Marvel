@@ -2,7 +2,7 @@
 //  RemoteWebImage.swift
 //  Marvel
 //
-//  Created by Jasmine on 15/02/2025.
+//  Created by Salma Atef on 15/02/2025.
 //
 
 import SwiftUI

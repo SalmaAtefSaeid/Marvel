@@ -26,6 +26,7 @@ class NetworkManager {
     
     private init() {}
     
+    // MARK: - Generic HTTP Request
     func sendHTTPRequest<T: Codable>(urlString: String, httpMethod: HTTPMethodType, parameters: [String:Any]? = nil) async throws -> T {
         
         guard let apiURL = URL(string: urlString) else {throw URLError(.badURL)}
@@ -55,7 +56,7 @@ class NetworkManager {
             throw URLError(.badServerResponse)
         }
         
-        guard (200...299).contains(httpResponse.statusCode) else {
+        guard httpResponse.statusCode == 200 else {
             // Attempt to decode error model from the response data
             if let errorModel = try? JSONDecoder().decode(ErrorModel.self, from: data) {
                 throw errorModel
@@ -72,11 +73,12 @@ class NetworkManager {
         }
     }
     
+    // MARK: - Image Downloading with Caching
     func downloadImage(fromURLString urlString: String) async throws -> UIImage {
         let cacheKey = NSString(string: urlString)
         
-        if let image = cache.object(forKey: cacheKey) {
-            return image
+        if let cachedImage = cache.object(forKey: cacheKey) {
+            return cachedImage
         }
         
         guard let url = URL(string: urlString) else {
@@ -89,7 +91,7 @@ class NetworkManager {
             throw URLError(.badServerResponse)
         }
         
-        guard (200...299).contains(httpResponse.statusCode) else {
+        guard httpResponse.statusCode == 200 else {
             // Attempt to decode error model from the response data
             if let errorModel = try? JSONDecoder().decode(ErrorModel.self, from: data) {
                 throw errorModel

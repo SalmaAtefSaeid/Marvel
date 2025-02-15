@@ -8,7 +8,8 @@
 import Foundation
 import Combine
 
-@MainActor final class MarvelCharacterDetailsViewModel: ObservableObject {
+@MainActor 
+final class MarvelCharacterDetailsViewModel: ObservableObject {
     
     @Published var comics = [Comic]()
     @Published var stories = [Story]()
@@ -62,7 +63,7 @@ import Combine
                 self.stories = apiResponse.data.results
                 self.isLoading = false
             } catch {
-                print("Error fetching comics: \(error)")
+                print("Error fetching stories: \(error)")
                 self.showError = true
                 self.errorMessage = error.localizedDescription
                 self.isLoading = false
@@ -82,7 +83,7 @@ import Combine
                 self.events = apiResponse.data.results
                 self.isLoading = false
             } catch {
-                print("Error fetching comics: \(error)")
+                print("Error fetching events: \(error)")
                 self.showError = true
                 self.errorMessage = error.localizedDescription
                 self.isLoading = false

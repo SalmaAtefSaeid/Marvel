@@ -8,7 +8,8 @@
 import Foundation
 import Combine
 
-@MainActor final class MarvelCharactersListViewModel: ObservableObject {
+@MainActor 
+final class MarvelCharactersListViewModel: ObservableObject {
     
     @Published var characters = [MarvelCharacter]()
     @Published var isLoading = false
@@ -49,7 +50,7 @@ import Combine
                 self.currentPage += 1
                 self.isLoading = false
             } catch {
-                print("Error fetching comics: \(error)")
+                print("Error fetching characters: \(error)")
                 self.showError = true
                 self.errorMessage = error.localizedDescription
                 self.isLoading = false
@@ -70,7 +71,7 @@ import Combine
                 self.currentPage += 1
                 self.isLoading = false
             } catch {
-                print("Error fetching comics: \(error)")
+                print("Error fetching characters: \(error)")
                 self.showError = true
                 self.errorMessage = error.localizedDescription
                 self.isLoading = false
