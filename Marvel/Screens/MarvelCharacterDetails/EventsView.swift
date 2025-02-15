@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct EventsView: View {
     
@@ -21,8 +20,7 @@ struct EventsView: View {
                 LazyHStack(spacing: 15) {
                     ForEach(events) { event in
                         VStack(alignment: .center) {
-                            WebImage(url: URL(string: event.thumbnail.fullURL))
-                                .resizable()
+                            RemoteWebImage(urlString: event.thumbnail.fullURL)
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 100, height: 150)
                                 .clipped()

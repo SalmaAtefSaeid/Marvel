@@ -11,6 +11,7 @@ struct ExitButton: View {
     var body: some View {
         HStack {
             Image(systemName: "multiply")
+                .frame(width: 44, height: 44)
                 .foregroundColor(.white)
                 .font(.title2)
         }

@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
-
-import SwiftUI
 
 struct MarvelCharacterView: View {
     let character: MarvelCharacter
@@ -16,8 +13,7 @@ struct MarvelCharacterView: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             // Background Image
-            WebImage(url: URL(string: character.thumbnail.fullURL))
-                .resizable()
+            RemoteWebImage(urlString: character.thumbnail.fullURL)
                 .aspectRatio(contentMode: .fill)
                 .frame(width: UIScreen.main.bounds.width, height: 170)
                 .clipped()  // Ensures the image doesn't overflow

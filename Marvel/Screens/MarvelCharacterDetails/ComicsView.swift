@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct ComicsView: View {
     
@@ -24,8 +23,7 @@ struct ComicsView: View {
                 LazyHStack(alignment: .top, spacing: 15) {
                     ForEach(comics) { comic in
                         VStack {
-                            WebImage(url: URL(string: comic.thumbnail.fullURL))
-                                .resizable()
+                            RemoteWebImage(urlString: comic.thumbnail.fullURL)
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 100, height: 150)
                                 .clipped()

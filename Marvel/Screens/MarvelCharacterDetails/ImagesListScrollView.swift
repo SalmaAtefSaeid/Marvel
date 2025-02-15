@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct ImagesListScrollView: View {
     
@@ -18,8 +17,7 @@ struct ImagesListScrollView: View {
             HStack(spacing: 0) {
                 ForEach(Array(images.enumerated()), id: \.offset) { index, image in
                     VStack(alignment: .center, spacing: 0) {
-                        WebImage(url: URL(string: image.fullURL))
-                            .resizable()
+                        RemoteWebImage(urlString: image.fullURL)
                             .aspectRatio(contentMode: .fill)
                             .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.7)
                             .clipped()

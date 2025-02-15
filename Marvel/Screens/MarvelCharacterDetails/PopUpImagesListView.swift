@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct PopUpImagesListView: View {
     
@@ -15,26 +14,17 @@ struct PopUpImagesListView: View {
     @Binding var showPopUpView: Bool
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
+        ZStack() {
             Color.black
                 .opacity(0.8)
-            
-            VStack(alignment: .trailing) {
-                Spacer()
-                Button(action: {
-                    showPopUpView = false
-                }) {
-                    ExitButton()
-                        .frame(width: 30, height: 30)
-                }
-                .padding(.top, 20)
-                .padding(.trailing, 20)
-                
+            VStack(alignment: .center) {
                 ImagesListScrollView(images: images, name: name)
-                Spacer()
+                .overlay(Button {
+                    showPopUpView = false
+                } label: {
+                    ExitButton()
+                }, alignment: .topTrailing)
             }
-            .edgesIgnoringSafeArea(.all)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         }
         .edgesIgnoringSafeArea(.all)
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)

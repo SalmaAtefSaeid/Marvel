@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct MarvelCharacterDetailsView: View {
     
@@ -20,8 +19,7 @@ struct MarvelCharacterDetailsView: View {
         ZStack {
             ScrollView(showsIndicators: false) {
                 VStack {
-                    WebImage(url: URL(string: viewModel.character.thumbnail.fullURL))
-                        .resizable()
+                    RemoteWebImage(urlString: viewModel.character.thumbnail.fullURL)
                         .aspectRatio(contentMode: .fill)
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height/2)
                         .clipped()

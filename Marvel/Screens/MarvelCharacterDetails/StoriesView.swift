@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct StoriesView: View {
     
@@ -21,8 +20,7 @@ struct StoriesView: View {
                 LazyHStack(spacing: 15) {
                     ForEach(stories) { story in
                         VStack(alignment: .center) {
-                            WebImage(url: URL(string: story.thumbnail.fullURL))
-                                .resizable()
+                            RemoteWebImage(urlString: story.thumbnail.fullURL)
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 100, height: 150)
                                 .clipped()

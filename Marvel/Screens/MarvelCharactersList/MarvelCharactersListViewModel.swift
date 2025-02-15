@@ -8,14 +8,13 @@
 import Foundation
 import Combine
 
-class MarvelCharactersListViewModel: ObservableObject {
+@MainActor final class MarvelCharactersListViewModel: ObservableObject {
     
     @Published var characters = [MarvelCharacter]()
     @Published var isLoading = false
     @Published var errorMessage = ""
     @Published var showError = false
     
-    private let networkManager = NetworkManager()
     private let pageSize = 20
     private var currentPage = 0
     
@@ -43,18 +42,17 @@ class MarvelCharactersListViewModel: ObservableObject {
         isLoading = true
         let offset = currentPage * pageSize
         let parameters: [String : Any] = NetworkConstants().authenticationParameters(parameters: ["offset": offset, "limit": pageSize, "nameStartsWith": searchQuery])
-        networkManager.sendHTTPRequest(urlString:  NetworkConstants.requestToGetCharactersList, httpMethod: HTTPMethodType.get.rawValue, parameters: parameters) { [weak self] (apiResponse: APIResponseWrapper<MarvelCharacter>) in
-            DispatchQueue.main.async {
-                self?.characters = apiResponse.data.results
-                self?.currentPage += 1
-                self?.isLoading = false
-            }
-        } failureHandler: { [weak self] error in
-            print("Error fetching characters: \(error)")
-            DispatchQueue.main.async { [self] in
-                self?.showError = true
-                self?.errorMessage = error.localizedDescription
-                self?.isLoading = false
+        Task {
+            do {
+                let apiResponse: APIResponseWrapper<MarvelCharacter> = try await NetworkManager.shared.sendHTTPRequest(urlString: NetworkConstants.requestToGetCharactersList, httpMethod: .get, parameters: parameters)
+                self.characters = apiResponse.data.results
+                self.currentPage += 1
+                self.isLoading = false
+            } catch {
+                print("Error fetching comics: \(error)")
+                self.showError = true
+                self.errorMessage = error.localizedDescription
+                self.isLoading = false
             }
         }
     }
@@ -64,18 +62,18 @@ class MarvelCharactersListViewModel: ObservableObject {
         isLoading = true
         let offset = currentPage * pageSize
         let parameters: [String : Any] = NetworkConstants().authenticationParameters(parameters: ["offset": offset, "limit": pageSize])
-        networkManager.sendHTTPRequest(urlString:  NetworkConstants.requestToGetCharactersList, httpMethod: HTTPMethodType.get.rawValue, parameters: parameters) { [weak self] (apiResponse: APIResponseWrapper<MarvelCharacter>) in
-            DispatchQueue.main.async {
-                self?.characters.append(contentsOf: apiResponse.data.results)
-                self?.currentPage += 1
-                self?.isLoading = false
-            }
-        } failureHandler: { [weak self] error in
-            print("Error fetching characters: \(error)")
-            DispatchQueue.main.async { [self] in
-                self?.showError = true
-                self?.errorMessage = error.localizedDescription
-                self?.isLoading = false
+        
+        Task {
+            do {
+                let apiResponse: APIResponseWrapper<MarvelCharacter> = try await NetworkManager.shared.sendHTTPRequest(urlString: NetworkConstants.requestToGetCharactersList, httpMethod: .get, parameters: parameters)
+                self.characters.append(contentsOf: apiResponse.data.results)
+                self.currentPage += 1
+                self.isLoading = false
+            } catch {
+                print("Error fetching comics: \(error)")
+                self.showError = true
+                self.errorMessage = error.localizedDescription
+                self.isLoading = false
             }
         }
     }
